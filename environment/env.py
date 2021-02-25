@@ -20,6 +20,19 @@ class Config:
         self.frame_width = 10
 
 
+class Waypoint:
+    def __init__(self, x: int, y: int, time_remaining: int, reward: int):
+        self.x = x
+        self.y = y
+        self.time_remaining = time_remaining
+        self.reward = reward
+        self.color = (0, 255, 0)
+
+    def get_reward(self, agent_x, agent_y):
+        ''' Gets reward of agent wrt waypoint '''
+        pass
+
+
 class Environment(gym.Env):
     def __init__(self, config):
         # cache
@@ -53,11 +66,6 @@ class Environment(gym.Env):
         self.time_step = 0
 
     # initialization
-    # @cached_property
-    # def coord_map(self):
-        # ''' Map converting ids on top-down map to x, y coords '''
-#
-
     def random_empty_locs(self, n: int, top_map: np.array = None):
         ''' Gets random location that is currently empty from map '''
         top_map = top_map if top_map is not None else self.top_map
@@ -80,10 +88,9 @@ class Environment(gym.Env):
         # # TODO: add more objects later
         return top_map
 
-    def build_waypoint(self):
-        pass
-        # x_loc =
-        # return waypoint
+    def reset_waypoint(self):
+        x_loc, y_loc = self.random_empty_locs(1)
+        self.waypoint = x_loc,
 
     # vis
     def render(self):

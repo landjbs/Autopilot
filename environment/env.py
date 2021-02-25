@@ -6,13 +6,27 @@ import gym
 import torch
 
 
+class Config:
+    def __init__(self, **kwargs):
+        # map creation
+        self.map_x_len = 10
+        self.map_y_len = 10
+
+
 class Environment(gym.Env):
     def __init__(self, config = None):
         # top-down map
         self.top_map = self.build_map(10, 15)
-        # dimensions
-        # self.action_space = gym.spaces.Discrete()
-        # self.observation_space = gym.spaces.Discrete()
+        #
+        # action dimensions
+        # gas: [0., 1.], brake: [0., 1.], steer: [-1., 1]
+        self.action_space = gym.spaces.Box(
+            torch.tensor([0., 0., -1.]), torch.tensor([+1., +1., +1.])
+        )
+        # observation dimensions
+        self.observation_space = gym.spaces.Discrete(
+            
+        )
 
     def build_map(self, x_len: int, y_len: int):
         '''
@@ -24,7 +38,7 @@ class Environment(gym.Env):
         top_map = torch.ones(x_len, y_len)
         # add borders around it
         top_map = add_border(top_map)
-        # # TODO: add more objects later
+        # # TODO: add more objects laterb
         return top_map
 
     def step(self, action: torch.Tensor):

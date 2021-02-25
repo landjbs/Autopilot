@@ -20,9 +20,14 @@ class Config:
 
 class Environment(gym.Env):
     def __init__(self, config):
+        # cache
+        self.map_x_len = config.map_x_len
+        self.map_y_len = config.map_y_len
         # top-down map
-        self.top_map = self.build_map(10, 15)
-        #
+        self.top_map = self.build_map(self.map_x_len, self.map_y_len)
+        # place agent
+        self.x_agent = 0.
+        self.y_agent = 0.
         # action dimensions
         # gas: [0., 1.], brake: [0., 1.], steer: [-1., 1]
         self.action_space = gym.spaces.Box(
@@ -74,5 +79,6 @@ import matplotlib.pyplot as plt
 
 c = Config()
 e = Environment(c)
-plt.imshow(e.top_map)
-plt.show()
+print(e.action_space.sample())
+# plt.imshow(e.top_map)
+# plt.show()

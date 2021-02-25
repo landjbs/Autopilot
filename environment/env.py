@@ -25,11 +25,10 @@ class Environment(gym.Env):
         #
         # action dimensions
         # gas: [0., 1.], brake: [0., 1.], steer: [-1., 1]
-        # self.action_space = gym.spaces.Box(
-            # torch.tensor([0., 0., -1.]), torch.tensor([1., 1., 1.])
-        # )
+        self.action_space = gym.spaces.Box(
+            np.array([0., 0., -1.]), np.array([1., 1., 1.])
+        )
         # observation dimensions
-        #
         self.observation_space = gym.spaces.Box(
             low=0,
             high=255,
@@ -41,14 +40,14 @@ class Environment(gym.Env):
 
     def build_map(self, x_len: int, y_len: int):
         '''
-        Initializes map. Ones are unblocked, zeros are blocked.
+        Initializes map. zeros are unblocked, ones are blocked.
         '''
-        # border walls
-        add_border = torch.nn.ZeroPad2d(padding=1)
         # initialize top-down map
-        top_map = torch.ones(x_len, y_len)
+        top_map = np.zeros(shape=(x_len, y_len), dtype=np.int8)
         # add borders around it
-        top_map = add_border(top_map)
+        top_map = np.pad(
+            top_map, pad_width=1, mode='constant', constant_values=1
+        )
         # # TODO: add more objects laterb
         return top_map
 
@@ -75,6 +74,5 @@ import matplotlib.pyplot as plt
 
 c = Config()
 e = Environment(c)
-e.render()
-# plt.imshow(e.top_map)
-# plt.show()
+plt.imshow(e.top_map)
+plt.show()

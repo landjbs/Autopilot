@@ -5,6 +5,8 @@ Simple environment for driving.
 import gym
 import torch
 import numpy as np
+import matplotlib.pyplot as plt
+from cached_property import cached_property
 
 
 class Config:
@@ -28,6 +30,10 @@ class Environment(gym.Env):
         # place agent
         self.x_agent = 0.
         self.y_agent = 0.
+        self.speed_agent = 0.
+        self.angle_agent = 0.
+        # waypoints
+        self.waypoint = self.build_waypoint()
         # action dimensions
         # gas: [0., 1.], brake: [0., 1.], steer: [-1., 1]
         self.action_space = gym.spaces.Box(
@@ -42,6 +48,17 @@ class Environment(gym.Env):
             ),
             dtype=np.uint8
         )
+        # timing
+        self.time_step = 0
+
+    # initialization
+    @cached_property
+    def coord_map(self):
+        ''' Map converting ids on top-down map to x, y coords '''
+
+    def random_empty_loc(self):
+        ''' Gets random location that is currently empty from map '''
+        np.where()
 
     def build_map(self, x_len: int, y_len: int):
         '''
@@ -56,6 +73,24 @@ class Environment(gym.Env):
         # # TODO: add more objects laterb
         return top_map
 
+    def build_waypoint(self):
+        x_loc =
+        return waypoint
+
+    # vis
+    def render(self):
+        plt.imshow(self.top_map)
+        plt.show()
+
+    # movement
+    def _move(self,):
+
+    # reward
+    def _get_reward(self):
+        ''' Gets reward for current state '''
+        # speed reward
+
+
     def step(self, action: torch.Tensor):
         '''
         Args:
@@ -67,6 +102,7 @@ class Environment(gym.Env):
             info:           Dict of additional information. Not to be used for
                             learning.
         '''
+        #
 
         return observation, reward, done, info
 
@@ -75,8 +111,6 @@ class Environment(gym.Env):
 
 
 # tests
-import matplotlib.pyplot as plt
-
 c = Config()
 e = Environment(c)
 print(e.action_space.sample())

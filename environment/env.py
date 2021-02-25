@@ -28,10 +28,11 @@ class Environment(gym.Env):
         # top-down map
         self.top_map = self.build_map(self.map_x_len, self.map_y_len)
         # place agent
-        self.x_agent = 0.
-        self.y_agent = 0.
-        self.speed_agent = 0.
-        self.angle_agent = 0.
+        agent_x, agent_y = self.random_empty_locs(1)
+        self.agent_x = agent_x
+        self.agent_y = agent_y
+        self.agent_speed = 0.
+        self.agent_angle = 0.
         # waypoints
         self.waypoint = self.build_waypoint()
         # action dimensions
@@ -57,15 +58,16 @@ class Environment(gym.Env):
         # ''' Map converting ids on top-down map to x, y coords '''
 #
 
-    def random_empty_locs(self, n: int):
+    def random_empty_locs(self, n: int, top_map: np.array = None):
         ''' Gets random location that is currently empty from map '''
-        i, j = np.nonzero(self.top_map)
+        top_map = top_map if top_map is not None else self.top_map
+        i, j = np.nonzero(top_map)
         ix = np.random.choice(len(i), n, replace=False)
-        return self.top_map[i[ix], j[ix]]
+        return (i[ix], j[ix])
 
     def build_map(self, x_len: int, y_len: int):
         '''
-        Initializes map. zeros are unblocked, ones are blocked.
+        Initializes map. ones are unblocked, zeros are blocked.
         '''
         # initialize top-down map
         top_map = np.ones(shape=(x_len, y_len), dtype=np.int8)
@@ -73,7 +75,9 @@ class Environment(gym.Env):
         top_map = np.pad(
             top_map, pad_width=1, mode='constant', constant_values=0
         )
-        # # TODO: add more objects laterb
+        # random objects
+        # top_map[self.random_empty_locs(10, top_map)] = 0.
+        # # TODO: add more objects later
         return top_map
 
     def build_waypoint(self):
@@ -118,6 +122,4 @@ class Environment(gym.Env):
 # tests
 c = Config()
 e = Environment(c)
-print(e.random_empty_locs(10))
-# plt.imshow(e.top_map)
-# plt.show()
+e.render()

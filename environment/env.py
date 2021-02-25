@@ -47,7 +47,7 @@ class Environment(gym.Env):
         self.agent_speed = 0.
         self.agent_angle = 0.
         # waypoints
-        self.waypoint = self.build_waypoint()
+        self.waypoints = set()
         # action dimensions
         # gas: [0., 1.], brake: [0., 1.], steer: [-1., 1]
         self.action_space = gym.spaces.Box(
@@ -88,9 +88,14 @@ class Environment(gym.Env):
         # # TODO: add more objects later
         return top_map
 
-    def reset_waypoint(self):
-        x_loc, y_loc = self.random_empty_locs(1)
-        self.waypoint = x_loc,
+    def add_waypoint(self, **kwargs):
+        x, y = self.random_empty_locs(1)
+        time_remaining = 10
+        waypoint = Waypoint(x=x, y=y, time_remaining=time_remaining, reward=100)
+        self.waypoints.add()
+
+    def reset(self):
+        pass
 
     # vis
     def render(self):
@@ -121,9 +126,6 @@ class Environment(gym.Env):
         #
 
         return observation, reward, done, info
-
-    def reset(self):
-        pass
 
 
 # tests

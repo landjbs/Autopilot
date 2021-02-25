@@ -52,30 +52,34 @@ class Environment(gym.Env):
         self.time_step = 0
 
     # initialization
-    @cached_property
-    def coord_map(self):
-        ''' Map converting ids on top-down map to x, y coords '''
+    # @cached_property
+    # def coord_map(self):
+        # ''' Map converting ids on top-down map to x, y coords '''
+#
 
-    def random_empty_loc(self):
+    def random_empty_locs(self, n: int):
         ''' Gets random location that is currently empty from map '''
-        np.where()
+        i, j = np.nonzero(self.top_map)
+        ix = np.random.choice(len(i), n, replace=False)
+        return self.top_map[i[ix], j[ix]]
 
     def build_map(self, x_len: int, y_len: int):
         '''
         Initializes map. zeros are unblocked, ones are blocked.
         '''
         # initialize top-down map
-        top_map = np.zeros(shape=(x_len, y_len), dtype=np.int8)
+        top_map = np.ones(shape=(x_len, y_len), dtype=np.int8)
         # add borders around it
         top_map = np.pad(
-            top_map, pad_width=1, mode='constant', constant_values=1
+            top_map, pad_width=1, mode='constant', constant_values=0
         )
         # # TODO: add more objects laterb
         return top_map
 
     def build_waypoint(self):
-        x_loc =
-        return waypoint
+        pass
+        # x_loc =
+        # return waypoint
 
     # vis
     def render(self):
@@ -84,6 +88,7 @@ class Environment(gym.Env):
 
     # movement
     def _move(self,):
+        pass
 
     # reward
     def _get_reward(self):
@@ -113,6 +118,6 @@ class Environment(gym.Env):
 # tests
 c = Config()
 e = Environment(c)
-print(e.action_space.sample())
+print(e.random_empty_locs(10))
 # plt.imshow(e.top_map)
 # plt.show()

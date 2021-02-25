@@ -18,8 +18,8 @@ class BaseObject:
     '''
 
     def __init__(
-            self, static: bool, height: int, width: int, color: tuple,
-            behavior: Behavior = None
+            self, x_loc: float, y_loc: float,  static: bool, height: int,
+            width: int, color: tuple, behavior: Behavior = None
         ):
         # assertions
         # assert isinstance(static, bool), 'Static expected type bool'
@@ -41,3 +41,9 @@ class BaseObject:
         self.color = color
         if not self.static:
             self.behavior = behavior
+
+    def step(self):
+        if self.static:
+            return None
+        else:
+            x_loc, y_loc = self.behavior.step()
